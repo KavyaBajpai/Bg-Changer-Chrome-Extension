@@ -3,7 +3,8 @@ async function sayHello() {
     chrome.scripting.executeScript({
         target: {tabId: tab.id},
         func: () => {
-            
+            document.body.style.backgroundColor = "#edc5f0";
+            document.body.style.setProperty("color", "#000", "important");
             alert('Hello from my extension!');
         }
 });
