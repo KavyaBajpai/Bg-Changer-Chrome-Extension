@@ -1,42 +1,209 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+*{
+    margin: 0;
+    padding: 0px;
+    box-sizing: border-box;
+    background-color: #3a3939;
+    border-radius: 20%;
+}
+.main-container{
+    display: flex;
+    padding: 0px;
+    flex-direction: column;
+    gap: 20px;
+    min-width: 350px;  /* Prevent it from becoming too small */
+    max-width: 90%;    /* Prevent it from being too wide */
+    height: 500px;
+    background-color: #3a3939;
+    color: white;
+    border-radius: 20%;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.top-div{
+  display: flex;
+  justify-content: space-between;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+hr{
+  border: 0;
+  height: 1px;
+  background: white;
+  padding: 0px;
+  margin: 0px;
+}
+.logo-div{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.close-icon{
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+  border-radius: 100%;
 }
 
-.card {
-  padding: 2em;
+.close-btn{
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
 }
 
-.read-the-docs {
-  color: #888;
+.name{
+  font-size: 30px;
+  font-weight: 300;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
+
+.mid-div{
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background: transparent;
+}
+
+.light-mode{
+  display: flex;
+  align-items: center;
+  padding-left: 15px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  gap: 6px;
+}
+
+.dark-mode{
+  display: flex;
+  align-items: center;
+  padding-left: 15px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  gap: 6px;
+}
+
+.pastel-mode{
+  display: flex;
+  align-items: center;
+  padding-left: 15px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  gap: 6px;
+}
+
+.light-mode span{
+  font-size: 20px;
+  font-weight: 300;
+}
+
+.dark-mode span{
+  font-size: 20px;
+  font-weight: 300;
+}
+
+.pastel-mode span{
+  font-size: 20px;
+  font-weight: 300;
+}
+
+.light-mode button{
+  border: none;
+  outline: none;
+  background: transparent;
+}
+
+.pastel-mode button{
+  border: none;
+  outline: none;
+  background: transparent;
+}
+
+.dark-mode button{
+  border: none;
+  outline: none;
+  background: transparent;
+}
+
+.louter-div{
+  width: 40px;
+  height: 20px;
+  padding: 3px;
+  border-radius: 50px;
+  background-color: #6b6a6a;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.louter-div.active {
+  background-color: #fcfcfc; /* Active state color */
+}
+
+.linner-div{
+  width: 18px;
+  height: 18px;
+  padding: 3px;
+  border-radius: 100px;
+  background-color: white;
+  transition: transform 0.3s ease-in-out;
+}
+
+.louter-div.active .linner-div {
+  transform: translateX(19px);
+  background-color: #000000; /* Moves the circle to the right */
+}
+
+.douter-div{
+  width: 40px;
+  height: 20px;
+  padding:3px;
+  border-radius: 50px;
+  background-color: #6b6a6a;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.douter-div.active {
+  background-color: #fcfcfc; /* Active state color */
+}
+
+.dinner-div{
+  width: 18px;
+  height: 18px;
+  padding: 3px;
+  border-radius: 100px;
+  background-color: white;
+  transition: transform 0.3s ease-in-out;
+}
+
+.douter-div.active .dinner-div {
+  transform: translateX(19px);
+  background-color: #000000; /* Moves the circle to the right */
+}
+
+.pouter-div{
+  width: 40px;
+  height: 20px;
+  padding: 3px;
+  border-radius: 50px;
+  background-color: #6b6a6a;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.pouter-div.active {
+  background-color: #fcfcfc; /* Active state color */
+}
+
+.pinner-div{
+  width: 18px;
+  height: 18px;
+  border-radius: 100px;
+  background-color: white;
+  transition: transform 0.3s ease-in-out;
+}
+
+.pouter-div.active .pinner-div {
+  transform: translateX(19px);
+  background-color: #000000; /* Moves the circle to the right */
+}
+
