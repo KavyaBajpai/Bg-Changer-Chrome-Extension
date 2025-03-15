@@ -1,34 +1,51 @@
 import { useState } from 'react'
+import { useEffect } from 'react'
 import './App.css'
 
 function App() {
-  const [color, setColor] = useState("black");
+  //const [color, setColor] = useState("black");
   const [isOnL, setIsOnL] = useState(false);
   const [isOnD, setIsOnD] = useState(false);
   const [isOnP, setIsOnP] = useState(false);
-  const [activeMode, setActiveMode] = useState<"light" | "dark" | "pastel">("light");
+  const [originalColor, setOriginalColor] = useState<string | null>(null);
+  //const [activeMode, setActiveMode] = useState<"light" | "dark" | "pastel">("light");
 
   const toggleSwitchL = () => {
-    setIsOnL(!isOnL);
-    if(isOnD)
-      setIsOnD(!isOnD);
-    if(isOnP)
-      setIsOnP(!isOnP);
-  }
+    if (isOnL) {
+      changeMode("original");
+      setIsOnL(false);
+    } else {
+      changeMode("light");
+      setIsOnL(true);
+      setIsOnD(false);
+      setIsOnP(false);
+    }
+  };
+  
   const toggleSwitchD = () => {
-    setIsOnD(!isOnD);
-    if(isOnL)
-      setIsOnL(!isOnL);
-    if(isOnP)
-      setIsOnP(!isOnP);
-  }
+    if (isOnD) {
+      changeMode("original");
+      setIsOnD(false);
+    } else {
+      changeMode("dark");
+      setIsOnD(true);
+      setIsOnL(false);
+      setIsOnP(false);
+    }
+  };
+  
   const toggleSwitchP = () => {
-    setIsOnP(!isOnP);
-    if(isOnL)
-      setIsOnL(!isOnL);
-    if(isOnD)
-      setIsOnD(!isOnD);
-  }
+    if (isOnP) {
+      changeMode("original");
+      setIsOnP(false);
+    } else {
+      changeMode("pastel");
+      setIsOnP(true);
+      setIsOnL(false);
+      setIsOnD(false);
+    }
+  };
+  
   // const onclick = async () => {
   //   const [tab] = await chrome.tabs.query({active:true, currentWindow:true});
   //   chrome.scripting.executeScript<string[], void>({
@@ -40,31 +57,67 @@ function App() {
   //   })
   // }
 
-  const changeMode = async (activeMode: "dark" | "light" | "pastel") => {
+  const changeMode = async (mode: "dark" | "light" | "pastel" | "original") => {
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
     if (!tab.id) return;
   
     chrome.scripting.executeScript({
       target: { tabId: tab.id },
-      args: [activeMode],
-      func: (mode) => {
+      args: [mode, originalColor],
+      func: (mode, originalColor) => {
         if (mode === "dark") {
           document.body.style.backgroundColor = "#000000";
-          document.body.style.color = "#ffffff";
         } else if (mode === "light") {
           document.body.style.backgroundColor = "#ffffff";
-          document.body.style.color = "#000000";
         } else if (mode === "pastel") {
-          document.body.style.backgroundColor = "#f8c8dc"; // Example pastel color (light pink)
-          document.body.style.color = "#000000";
+          document.body.style.backgroundColor = "#ff8b94"; // Pastel color
+        } else if (mode === "original") {
+          document.body.style.backgroundColor = originalColor || "#ffffff"; // Default to white if null
         }
       },
     });
   };
+  
 
-  const handleMode= (mode: "dark" | "light" | "pastel") => {
-    changeMode(mode);
-  }
+  // const handleMode= (mode: "dark" | "light" | "pastel") => {
+  //   changeMode(mode);
+  // }
+  
+  useEffect(() => {
+    const getOriginalColor = async () => {
+      try {
+        const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+        if (!tab?.id) return;
+  
+        chrome.scripting.executeScript(
+          {
+            target: { tabId: tab.id },
+            func: () => {
+              const computedColor = getComputedStyle(document.body).backgroundColor;
+              return computedColor || "white"; // Default to white if no color is found
+            },
+          },
+          (result) => {
+            if (chrome.runtime.lastError) {
+              console.error("Script execution error:", chrome.runtime.lastError.message);
+            } else if (result && result[0]?.result) {
+              console.log("Original color detected:", result[0].result);
+              setOriginalColor(result[0].result);
+            }
+          }
+        );
+      } catch (error) {
+        console.error("Error retrieving original color:", error);
+      }
+    };
+  
+    getOriginalColor();
+  }, []);
+  
+
+  // useEffect(() => {
+  //   getOriginalColor();
+  // }, []);
   
 
   return (
@@ -82,7 +135,7 @@ function App() {
         <div className='mid-div'>
           <div className='light-mode'>
              <button>
-              <div className={`louter-div ${ isOnL ? "active" : ""}`} onClick={() => {toggleSwitchL(); setActiveMode("light"); handleMode(activeMode); }}>
+              <div className={`louter-div ${ isOnL ? "active" : ""}`} onClick={() => {toggleSwitchL();}}>
                 <div className='linner-div'>
                 </div>
               </div>
@@ -92,7 +145,7 @@ function App() {
 
           <div className='dark-mode'>
              <button>
-             <div className={`douter-div ${ isOnD ? "active" : ""}`} onClick={() => {toggleSwitchD(); setActiveMode("dark"); handleMode(activeMode); }}>
+             <div className={`douter-div ${ isOnD ? "active" : ""}`} onClick={() => {toggleSwitchD();}}>
                 <div className='dinner-div'>
                 </div>
               </div>
@@ -102,7 +155,7 @@ function App() {
 
           <div className='pastel-mode'>
              <button>
-             <div className={`pouter-div ${ isOnP ? "active" : ""}`} onClick={() => {toggleSwitchP(); setActiveMode("pastel"); handleMode(activeMode); }}>
+             <div className={`pouter-div ${ isOnP ? "active" : ""}`} onClick={() => {toggleSwitchP(); }}>
                 <div className='pinner-div'>
                 </div>
               </div>
@@ -110,9 +163,9 @@ function App() {
              <span>Pastel Mode</span>
           </div>
         </div>
-        <div className='bottom-div'>
+        {/* <div className='bottom-div'>
          <input type='color' value={color} onChange={(e)=> setColor(e.target.value)} />
-        </div>
+        </div> */}
       </div>
     </>
   )
